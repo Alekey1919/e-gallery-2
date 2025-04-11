@@ -11,9 +11,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function GamePage({ params }: { params: { id: string } }) {
+// Using 'any' for params to satisfy Next.js 15's PageProps constraint
+export default async function GamePage({ params }: { params: any }) {
+  const id = params.id as string;
+
   const game = await prisma.game.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: { screenshots: true },
   });
 

@@ -25,7 +25,7 @@ export default async function GamePage({ params }: { params: any }) {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-8">
+    <main className="flex min-h-screen flex-col items-center p-8 scroll-smooth">
       <div className="w-full max-w-6xl">
         <div className="mb-6">
           <Link href="/" className="text-blue-500 hover:underline">
@@ -39,7 +39,7 @@ export default async function GamePage({ params }: { params: any }) {
           {game.screenshots.map((screenshot: any) => (
             <div
               key={screenshot.id}
-              className="border rounded-lg overflow-hidden"
+              className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               <a
                 href={screenshot.url}

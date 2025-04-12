@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+import Carousel from "./components/Carousel";
 
 export default async function Home() {
   const games = await prisma.game.findMany({
@@ -7,11 +8,13 @@ export default async function Home() {
   });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="w-full max-w-5xl">
-        <h1 className="text-4xl font-bold mb-8">Game Gallery</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {games.map((game: any) => (
+    <main className="min-h-screen">
+      <div className="w-full">
+        {/* <h1 className="text-4xl font-bold mb-8">Game Gallery</h1>
+        <p>The art of in-game photography</p> */}
+
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"> */}
+        {/* {games.map((game: any) => (
             <Link
               key={game.id}
               href={`/games/${game.id}`}
@@ -19,8 +22,10 @@ export default async function Home() {
             >
               <h2 className="text-xl font-semibold">{game.name}</h2>
             </Link>
-          ))}
-        </div>
+          ))} */}
+        {/* </div> */}
+
+        <Carousel />
       </div>
     </main>
   );

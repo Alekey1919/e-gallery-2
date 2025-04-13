@@ -1,8 +1,12 @@
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
-const Card = ({ img }: { img: string }) => {
+const Card = ({ img, onClick }: { img: string; onClick: () => void }) => {
   return (
-    <div className="w-[500px] 4xl:w-[1000px] shrink-0">
+    <div
+      className={twMerge("lg:w-[800px] 4xl:w-[1200px] shrink-0")}
+      onClick={onClick}
+    >
       <Image
         src={img}
         alt="Game"

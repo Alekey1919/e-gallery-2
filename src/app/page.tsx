@@ -10,9 +10,6 @@ export default async function Home() {
   return (
     <main className="min-h-screen">
       <div className="w-full">
-        {/* <h1 className="text-4xl font-bold mb-8">Game Gallery</h1>
-        <p>The art of in-game photography</p> */}
-
         {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"> */}
         {/* {games.map((game: any) => (
             <Link

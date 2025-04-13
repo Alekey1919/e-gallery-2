@@ -1,9 +1,8 @@
 @import "./tailwind.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  scroll-behavior: smooth;
+  --foreground: #0c0c0c;
+  --background: #f2f3f4;
 }
 
 @theme inline {
@@ -13,11 +12,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  font-family: var(--font-bitter);
 }
 
 html {

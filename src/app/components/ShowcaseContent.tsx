@@ -47,18 +47,34 @@ const ShowcaseContent = ({
     };
   }, []);
 
-  const onClose = () => {
+  const onClose = ({ scrolledAllTheWay }: { scrolledAllTheWay: boolean }) => {
+    // Scroll a bit to perform a little animation while the entire section is disappearing towards the top
     if (containerRef.current && lenisInst) {
       lenisInst.scrollTo(containerRef.current.scrollTop + 500);
     }
 
-    setTimeout(() => {
-      setAnimationStep(AnimationStep.EXIT);
+    setTimeout(
+      () => {
+        setAnimationStep(AnimationStep.EXIT);
 
-      setTimeout(() => {
-        handleClose();
-      }, 800); // Match the duration of the CSS transition
-    }, 100);
+        setTimeout(() => {
+          handleClose();
+        }, 800); // Match the duration of the CSS transition
+      },
+      scrolledAllTheWay ? 0 : 100 // If scrolled all the way, close immediately; otherwise, give time to see the scrolling animation
+    );
+  };
+
+  const onScroll = () => {
+    if (!containerRef.current) return;
+
+    const scrolledAllTheWay =
+      containerRef.current.scrollTop + window.innerHeight >=
+      containerRef.current.scrollHeight;
+
+    if (scrolledAllTheWay) {
+      onClose({ scrolledAllTheWay: true });
+    }
   };
 
   return (
@@ -70,6 +86,7 @@ const ShowcaseContent = ({
           animationStep === AnimationStep.EXIT && "ease-in -translate-y-full"
         )}
         ref={containerRef}
+        onScroll={onScroll}
         id="containerRef"
       >
         <div
@@ -100,7 +117,7 @@ const ShowcaseContent = ({
       >
         <button
           className="bg-red-500 text-white px-4 py-2 rounded"
-          onClick={onClose}
+          onClick={() => onClose({ scrolledAllTheWay: false })}
         >
           Close
         </button>

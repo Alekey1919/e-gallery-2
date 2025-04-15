@@ -5,7 +5,20 @@ import Card from "./Card";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import Showcase from "./Showcase";
 
-const Carousel = () => {
+// Define types for game data
+interface Screenshot {
+  id: string;
+  url: string;
+  gameId: string;
+}
+
+interface Game {
+  id: string;
+  name: string;
+  screenshots?: Screenshot[];
+}
+
+const Carousel = ({ games }: { games: Game[] }) => {
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
 
   const targetRef = useRef<HTMLDivElement>(null);
@@ -45,13 +58,11 @@ const Carousel = () => {
               style={{ x }}
               transition={{ type: "tween", ease: "easeOut" }}
             >
-              {new Array(10).fill(0).map((_, index) => (
+              {games.map((game) => (
                 <Card
-                  img={
-                    "https://images.steamusercontent.com/ugc/2462985844203913726/09C2D8A14331E0180553879C47040165961B7870/"
-                  }
-                  onClick={() => setSelectedGame("1049410")}
-                  key={index}
+                  key={game.id}
+                  game={game}
+                  onClick={() => setSelectedGame(game.id)}
                 />
               ))}
             </motion.div>

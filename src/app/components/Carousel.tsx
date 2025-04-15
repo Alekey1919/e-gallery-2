@@ -42,19 +42,19 @@ const Carousel = ({ games }: { games: Game[] }) => {
     history.scrollRestoration = "manual";
   }, []);
 
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-83%"]);
+  const x = useTransform(smoothProgress, [0, 1], ["0%", "-100%"]);
 
   return (
     <>
       <div ref={containerRef} className="h-screen overflow-auto">
         <div ref={targetRef} className="relative flex h-[500vh] w-full">
-          <div className="sticky top-0 h-screen bg-background flex items-end overflow-hidden w-full left-0">
+          <div className="sticky top-0 h-screen bg-background flex items-end justify-between overflow-hidden w-full left-0">
             <div className="absolute top-20 left-20">
               <h1 className="text-4xl font-bold mb-8">E-gallery</h1>
               <p className="text-xl">The art of in-game photography</p>
             </div>
             <motion.div
-              className="flex space-x-10 pb-4 px-4"
+              className="flex items-end space-x-10 pb-4 px-4"
               style={{ x }}
               transition={{ type: "tween", ease: "easeOut" }}
             >

@@ -31,7 +31,7 @@ const Card = ({ game, onClick }: CardProps) => {
   return (
     <div
       className={twMerge(
-        "lg:w-[800px] 4xl:w-[1200px] shrink-0 relative cursor-pointer"
+        "lg:w-[800px] 4xl:w-[1200px] shrink-0 relative cursor-pointer group"
       )}
       onClick={onClick}
     >
@@ -42,9 +42,9 @@ const Card = ({ game, onClick }: CardProps) => {
         width={1000}
         height={1000}
       />
-      {/* <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-        <h3 className="text-white text-xl font-medium">{game.name}</h3>
-      </div> */}
+      <div className="absolute -top-10 left-2 translate-y-full opacity-0 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0">
+        <span className="text-xl font-medium">{game.name}</span>
+      </div>
     </div>
   );
 };

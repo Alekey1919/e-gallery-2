@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Card from "./Card";
-import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import Showcase from "./Showcase";
+import Lenis from "lenis";
 
 // Define types for game data
 interface Screenshot {
@@ -19,59 +19,75 @@ interface Game {
 }
 
 const Carousel = ({ games }: { games: Game[] }) => {
-  const [selectedGame, setSelectedGame] = useState<string | null>(null);
+  const [selectedGame, setSelectedGame] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const targetRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Create a more isolated scroll tracking configuration
-  const { scrollYProgress } = useScroll({
-    container: containerRef,
-    target: targetRef,
-    offset: ["start", "end"],
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    mass: 0.1,
-    stiffness: 100,
-    damping: 20,
-    restDelta: 0.001,
-  });
 
   useEffect(() => {
     history.scrollRestoration = "manual";
   }, []);
 
-  const x = useTransform(smoothProgress, [0, 1], ["0%", "-100%"]);
+  useEffect(() => {
+    if (!targetRef.current || !containerRef.current) return;
+
+    // Initialize Lenis with the container element as the wrapper
+    const lenis = new Lenis({
+      wrapper: containerRef.current,
+      content: targetRef.current,
+      orientation: "horizontal",
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      touchMultiplier: 2,
+      autoRaf: true,
+    });
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  console.log("games", games);
 
   return (
     <>
-      <div ref={containerRef} className="h-screen overflow-auto">
-        <div ref={targetRef} className="relative flex h-[500vh] w-full">
-          <div className="sticky top-0 h-screen bg-background flex items-end justify-between overflow-hidden w-full left-0">
-            <div className="absolute top-20 left-20">
+      <div className="h-screen overflow-auto">
+        <div className="relative flex h-[500vh] w-full">
+          <div
+            className="sticky top-0 h-screen bg-background flex items-end justify-between overflow-hidden w-full left-0"
+            ref={containerRef}
+          >
+            <div className="fixed top-20 left-20">
               <h1 className="text-4xl font-bold mb-8">E-gallery</h1>
               <p className="text-xl">The art of in-game photography</p>
             </div>
-            <motion.div
-              className="flex items-end space-x-10 pb-4 px-4"
-              style={{ x }}
-              transition={{ type: "tween", ease: "easeOut" }}
-            >
-              {games.map((game) => (
-                <Card
-                  key={game.id}
-                  game={game}
-                  onClick={() => setSelectedGame(game.id)}
-                />
-              ))}
-            </motion.div>
+            <div className="w-full">
+              <div
+                className="flex items-end space-x-10 pb-20 px-20"
+                ref={targetRef}
+              >
+                {games.map((game) => (
+                  <Card
+                    key={game.id}
+                    game={game}
+                    onClick={() =>
+                      setSelectedGame({ id: game.id, name: game.name })
+                    }
+                  />
+                ))}
+                <div className="bg-transparent h-1 w-10 shrink-0" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
       {selectedGame !== null && (
         <Showcase
-          gameId={selectedGame}
+          gameId={selectedGame.id}
+          gameName={selectedGame.name}
           handleClose={() => setSelectedGame(null)}
         />
       )}

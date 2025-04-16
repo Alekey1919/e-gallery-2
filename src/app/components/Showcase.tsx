@@ -11,9 +11,11 @@ interface Screenshot {
 
 const Showcase = ({
   gameId,
+  gameName,
   handleClose,
 }: {
   gameId: string;
+  gameName: string;
   handleClose: () => void;
 }) => {
   const [screenshots, setScreenshots] = useState<Screenshot[]>([]);
@@ -43,12 +45,13 @@ const Showcase = ({
 
   if (loading) {
     return <></>;
-    // return <div>Loading...</div>;
   }
 
   return (
     <ShowcaseContent
       screenshots={screenshots.map((s) => s.url)}
+      gameId={gameId}
+      gameName={gameName}
       handleClose={handleClose}
     />
   );

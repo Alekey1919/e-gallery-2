@@ -12,9 +12,13 @@ enum AnimationStep {
 
 const ShowcaseContent = ({
   screenshots,
+  gameId,
+  gameName,
   handleClose,
 }: {
   screenshots: string[];
+  gameName: string;
+  gameId: string;
   handleClose: () => void;
 }) => {
   const [animationStep, setAnimationStep] = useState(AnimationStep.LOADING);
@@ -94,16 +98,31 @@ const ShowcaseContent = ({
           id="contentRef"
           ref={contentRef}
         >
+          <h1 className="text-2xl text-left mb-10 hover:underline">
+            <a
+              href={`https://store.steampowered.com/app/${gameId}/`}
+              target="_blank"
+            >
+              {gameName}
+            </a>
+          </h1>
+
           {screenshots.map((screenshot, index) => {
             return (
-              <Image
-                src={screenshot}
+              <a
+                href={screenshot}
                 key={index}
-                className="4xl:w-[1200px]"
-                alt={`Screenshot ${index + 1}`}
-                width={800}
-                height={450}
-              />
+                target="_blank"
+                className="cursor-default"
+              >
+                <Image
+                  src={screenshot}
+                  className="4xl:w-[1200px]"
+                  alt={`Screenshot ${index + 1}`}
+                  width={800}
+                  height={450}
+                />
+              </a>
             );
           })}
         </div>

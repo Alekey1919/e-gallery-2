@@ -50,8 +50,6 @@ const Carousel = ({ games }: { games: Game[] }) => {
     };
   }, []);
 
-  console.log("games", games);
-
   return (
     <>
       <div className="h-screen overflow-auto">
@@ -76,6 +74,7 @@ const Carousel = ({ games }: { games: Game[] }) => {
                     onClick={() =>
                       setSelectedGame({ id: game.id, name: game.name })
                     }
+                    carouselRef={containerRef}
                   />
                 ))}
                 <div className="bg-transparent h-1 w-10 shrink-0" />

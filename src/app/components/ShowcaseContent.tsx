@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
+import ScreenshotWithParallax from "./ScreenshotWithParallax";
 
 enum AnimationStep {
   LOADING,
@@ -115,12 +115,11 @@ const ShowcaseContent = ({
                 target="_blank"
                 className="cursor-default"
               >
-                <Image
+                <ScreenshotWithParallax
                   src={screenshot}
-                  className="4xl:w-[1200px]"
-                  alt={`Screenshot ${index + 1}`}
-                  width={800}
-                  height={450}
+                  styles="4xl:w-[1200px]"
+                  parallaxAxis="y"
+                  containerRef={containerRef}
                 />
               </a>
             );

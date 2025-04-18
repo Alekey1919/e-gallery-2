@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Card from "./Card";
 import Showcase from "./Showcase";
 import Lenis from "lenis";
+import CarouselGameCover from "./CarouselGameCover";
 
 // Define types for game data
 interface Screenshot {
@@ -67,16 +67,23 @@ const Carousel = ({ games }: { games: Game[] }) => {
                 className="flex items-end space-x-10 pb-20 px-20"
                 ref={targetRef}
               >
-                {games.map((game) => (
-                  <Card
-                    key={game.id}
-                    game={game}
-                    onClick={() =>
-                      setSelectedGame({ id: game.id, name: game.name })
-                    }
-                    carouselRef={containerRef}
-                  />
-                ))}
+                {games.map((game) => {
+                  if (!game.screenshots) return null; // Skip if no screenshots
+
+                  return (
+                    <CarouselGameCover
+                      key={game.id}
+                      gameName={game.name}
+                      screenshotProps={{
+                        src: game.screenshots[0].url,
+                        onClick: () =>
+                          setSelectedGame({ id: game.id, name: game.name }),
+                        containerRef: containerRef,
+                        parallaxAxis: "x",
+                      }}
+                    />
+                  );
+                })}
                 <div className="bg-transparent h-1 w-10 shrink-0" />
               </div>
             </div>

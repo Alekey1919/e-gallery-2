@@ -117,7 +117,7 @@ const ShowcaseContent = ({
               >
                 <ScreenshotWithParallax
                   src={screenshot}
-                  styles="4xl:w-[1200px]"
+                  styles="lg:w-[800px] 4xl:w-[1200px]"
                   parallaxAxis="y"
                   containerRef={containerRef}
                 />

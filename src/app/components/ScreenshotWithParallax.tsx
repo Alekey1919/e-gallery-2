@@ -56,10 +56,7 @@ const ScreenshotWithParallax = ({
 
   return (
     <div
-      className={twMerge(
-        "lg:w-[800px] 4xl:w-[1200px] shrink-0 relative cursor-pointer",
-        styles
-      )}
+      className={twMerge("relative cursor-pointer", styles)}
       onClick={onClick}
     >
       <div className="w-full overflow-hidden" ref={contentRef}>

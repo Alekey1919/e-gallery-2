@@ -6,7 +6,7 @@ export interface ScreenshotWithParallaxProps {
   src: string;
   parallaxAxis: "x" | "y";
   onClick?: () => void;
-  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerRef?: React.RefObject<HTMLDivElement | null>;
   styles?: string;
 }
 
@@ -22,19 +22,8 @@ const ScreenshotWithParallax = ({
 
   // Set up isReady state after component mounts and containerRef is valid
   useEffect(() => {
-    if (containerRef.current) {
-      setIsReady(true);
-    }
-
-    // Add a fallback in case ref is not immediately available
-    const checkRef = setTimeout(() => {
-      if (containerRef.current) {
-        setIsReady(true);
-      }
-    }, 100);
-
-    return () => clearTimeout(checkRef);
-  }, [containerRef]);
+    setIsReady(true);
+  }, []);
 
   // Only create the scroll progress when the container is ready
   const { scrollXProgress, scrollYProgress } = useScroll(
@@ -56,7 +45,11 @@ const ScreenshotWithParallax = ({
 
   return (
     <div
-      className={twMerge("relative cursor-pointer", styles)}
+      className={twMerge(
+        "relative cursor-pointer opacity-0 transition-opacity",
+        styles,
+        isReady && "opacity-100"
+      )}
       onClick={onClick}
     >
       <div className="w-full overflow-hidden" ref={contentRef}>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Showcase from "./Showcase";
-import Lenis from "lenis";
+import Lenis, { LenisOptions } from "lenis";
 import CarouselGameCover from "./CarouselGameCover";
 import useMediaQueryState, {
   DefaultBreakpoints,
@@ -38,16 +38,29 @@ const Carousel = ({ games }: { games: Game[] }) => {
   }, []);
 
   useEffect(() => {
+    // On desktop - use refs for horizontal scrolling within container
     if (!targetRef.current || !containerRef.current) return;
 
-    const lenis = new Lenis({
-      wrapper: containerRef.current,
-      content: targetRef.current,
-      orientation: lgScreen ? "horizontal" : "vertical",
+    const lenisOptions: LenisOptions = {
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
+      touchMultiplier: 4, // Increased for better touch response
+      syncTouch: true, // Synchronizes touch events
+      smoothWheel: true, // Smooth wheel scrolling
+      wheelMultiplier: 1, // Adjust wheel sensitivity
       autoRaf: true,
+      orientation: lgScreen ? "horizontal" : "vertical",
+    };
+
+    // For mobile, we don't need specific refs as we're scrolling the entire document
+    // For desktop, we use the container and target refs for horizontal scrolling
+    if (lgScreen) {
+      lenisOptions.wrapper = containerRef.current;
+      lenisOptions.content = targetRef.current;
+    }
+
+    const lenis = new Lenis({
+      ...lenisOptions,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
     return () => {
@@ -58,7 +71,7 @@ const Carousel = ({ games }: { games: Game[] }) => {
   return (
     <>
       <div className="lg:h-screen overflow-auto">
-        <div className="relative lg:flex-row h-[500vh] w-full">
+        <div className="relative lg:flex-row lg:h-[500vh] w-full">
           <div
             className={twMerge(
               "flex flex-col lg:flex-row lg:sticky lg:top-0 lg:h-screen bg-background items-start lg:items-end justify-between overflow-hidden w-full left-0",
@@ -92,8 +105,8 @@ const Carousel = ({ games }: { games: Game[] }) => {
                       src: game.screenshots[0].url,
                       onClick: () =>
                         setSelectedGame({ id: game.id, name: game.name }),
-                      containerRef: containerRef,
-                      parallaxAxis: "x",
+                      containerRef: lgScreen ? containerRef : undefined,
+                      parallaxAxis: lgScreen ? "x" : "y",
                     }}
                   />
                 );

@@ -5,6 +5,7 @@ import "lenis/dist/lenis.css";
 import ScreenshotWithParallax from "./ScreenshotWithParallax";
 import CloseIcon from "@public/close.png";
 import Image from "next/image";
+import ShowcaseCover from "./ShowcaseCover";
 
 enum AnimationStep {
   LOADING,
@@ -89,7 +90,7 @@ const ShowcaseContent = ({
       <div
         className={twMerge(
           "bg-background fixed top-0 left-0 h-screen w-screen overflow-y-auto overflow-x-hidden translate-y-full duration-700 ease-out transition-transform",
-          "pt-10 pb-20 lg:pt-14 lg:pb-28 3xl:!pt-20 3xl:!pb-40",
+          "pb-20 lg:pb-28 3xl:!pb-40",
           animationStep === AnimationStep.ENTER && "translate-y-0",
           animationStep === AnimationStep.EXIT && "ease-in -translate-y-full"
         )}
@@ -97,20 +98,18 @@ const ShowcaseContent = ({
         onScroll={onScroll}
         id="containerRef"
       >
+        <ShowcaseCover
+          screenshot={screenshots[0]}
+          gameName={gameName}
+          gameId={gameId}
+          containerRef={containerRef}
+        />
+
         <div
-          className="flex flex-col items-center space-y-6 3xl:!space-y-10 w-full"
+          className="flex flex-col items-center space-y-6 3xl:!space-y-10 w-full pt-10 lg:pt-14 3xl:!pt-20"
           id="contentRef"
           ref={contentRef}
         >
-          <h1 className="text-xl lg:text-2xl 3xl:!text-4xl text-left mb-7 lg:mb-12 3xl:!mb-16 hover:underline">
-            <a
-              href={`https://store.steampowered.com/app/${gameId}/`}
-              target="_blank"
-            >
-              {gameName}
-            </a>
-          </h1>
-
           {screenshots.map((screenshot, index) => {
             return (
               <a

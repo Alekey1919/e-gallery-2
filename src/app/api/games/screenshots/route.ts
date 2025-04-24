@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   try {
     const game = await prisma.game.findUnique({
       where: { id: gameId },
-      include: { screenshots: true },
+      include: { screenshots: { orderBy: { gameCover: "desc" } } },
     });
 
     if (!game) {

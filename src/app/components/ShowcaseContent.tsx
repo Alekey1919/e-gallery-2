@@ -3,6 +3,8 @@ import { twMerge } from "tailwind-merge";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import ScreenshotWithParallax from "./ScreenshotWithParallax";
+import CloseIcon from "@public/close.png";
+import Image from "next/image";
 
 enum AnimationStep {
   LOADING,
@@ -86,7 +88,8 @@ const ShowcaseContent = ({
     <>
       <div
         className={twMerge(
-          "bg-background fixed top-0 left-0 h-screen w-screen overflow-y-auto overflow-x-hidden translate-y-full duration-700 ease-out transition-transform pb-40 pt-20",
+          "bg-background fixed top-0 left-0 h-screen w-screen overflow-y-auto overflow-x-hidden translate-y-full duration-700 ease-out transition-transform",
+          "pt-10 pb-20 lg:pt-14 lg:pb-28 3xl:!pt-20 3xl:!pb-40",
           animationStep === AnimationStep.ENTER && "translate-y-0",
           animationStep === AnimationStep.EXIT && "ease-in -translate-y-full"
         )}
@@ -95,11 +98,11 @@ const ShowcaseContent = ({
         id="containerRef"
       >
         <div
-          className="flex flex-col items-center space-y-6 w-full"
+          className="flex flex-col items-center space-y-6 3xl:!space-y-10 w-full"
           id="contentRef"
           ref={contentRef}
         >
-          <h1 className="text-2xl text-left mb-10 hover:underline">
+          <h1 className="text-xl lg:text-2xl 3xl:!text-4xl text-left mb-7 lg:mb-12 3xl:!mb-16 hover:underline">
             <a
               href={`https://store.steampowered.com/app/${gameId}/`}
               target="_blank"
@@ -114,11 +117,11 @@ const ShowcaseContent = ({
                 href={screenshot}
                 key={index}
                 target="_blank"
-                className="cursor-default"
+                className="cursor-default flex justify-center"
               >
                 <ScreenshotWithParallax
                   src={screenshot}
-                  styles="lg:w-[800px] 4xl:w-[1200px]"
+                  styles="w-10/12 max-w-[400px] sm:max-w-[600px] lg:max-w-[unset] lg:w-[600px] 3xl:!w-[1000px] 4xl:w-[1200px] opacity-15"
                   parallaxAxis="y"
                   containerRef={containerRef}
                 />
@@ -128,19 +131,15 @@ const ShowcaseContent = ({
         </div>
       </div>
 
-      <div
+      <button
         className={twMerge(
-          "fixed top-4 right-4 z-[100] transition-opacity duration-300",
+          "fixed top-4 right-4 lg:top-6 lg:right-6 3xl:!top-8 3xl:!right-8 z-[100] transition-opacity duration-300 cursor-pointer",
           animationStep === AnimationStep.EXIT && "opacity-0"
         )}
+        onClick={() => onClose({ scrolledAllTheWay: false })}
       >
-        <button
-          className="bg-red-500 text-white px-4 py-2 rounded"
-          onClick={() => onClose({ scrolledAllTheWay: false })}
-        >
-          Close
-        </button>
-      </div>
+        <Image src={CloseIcon} alt="Close" className="w-6 lg:w-8 3xl:!w-12" />
+      </button>
     </>
   );
 };

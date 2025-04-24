@@ -64,8 +64,8 @@ const ScreenshotWithParallax = ({
             src={src}
             alt={`Screenshot`}
             className="w-full"
-            width={1000}
-            height={1000}
+            width={1400}
+            height={1400}
           />
         </motion.div>
       </div>

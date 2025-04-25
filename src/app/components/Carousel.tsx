@@ -8,6 +8,7 @@ import useMediaQueryState, {
   DefaultBreakpoints,
 } from "../hooks/useMediaQueryState";
 import { twMerge } from "tailwind-merge";
+import InitialAnimation from "./InitialAnimation";
 
 // Define types for game data
 interface Screenshot {
@@ -79,7 +80,7 @@ const Carousel = ({ games }: { games: Game[] }) => {
             )}
             ref={containerRef}
           >
-            <div className="lg:fixed lg:top-10 lg:left-10 3xl:!top-20 3xl:!left-20">
+            <div className="lg:fixed lg:top-10 lg:left-10 3xl:!top-20 3xl:!left-20 z-20">
               <h1 className="text-2xl sm:text-3xl 3xl:!text-4xl font-bold mb-4 3xl:!mb-8">
                 E-gallery
               </h1>
@@ -87,13 +88,15 @@ const Carousel = ({ games }: { games: Game[] }) => {
                 The art of in-game photography
               </p>
             </div>
+
             <div
               className={twMerge(
                 "grid gap-6 grid-cols-1 sm:grid-cols-2 lg:gap-0 mx-auto lg:mx-0",
-                "lg:flex lg:flex-row lg:items-end lg:space-x-6 3xl:!space-x-10 4xl:!space-x-14 lg:px-10 lg:pb-10 3xl:!pb-20 3xl:!px-20 "
+                "lg:flex lg:flex-row lg:items-end lg:space-x-6 3xl:!space-x-10 4xl:!space-x-14 lg:px-10 lg:pb-10 3xl:!pb-20 3xl:!px-20"
               )}
               ref={targetRef}
             >
+              <InitialAnimation containerRef={containerRef} />
               {games.map((game) => {
                 if (!game.screenshots) return null; // Skip if no screenshots
 

@@ -2,6 +2,7 @@ import { twMerge } from "tailwind-merge";
 import ScreenshotWithParallax, {
   ScreenshotWithParallaxProps,
 } from "./ScreenshotWithParallax";
+import useMediaQueryState from "../hooks/useMediaQueryState";
 
 const CarouselGameCover = ({
   gameName,
@@ -12,6 +13,10 @@ const CarouselGameCover = ({
   screenshotProps: ScreenshotWithParallaxProps;
   styles?: string;
 }) => {
+  const hasMouse = useMediaQueryState({
+    query: "(hover: hover), (pointer: fine)",
+  });
+
   return (
     <div
       className={twMerge(
@@ -24,9 +29,11 @@ const CarouselGameCover = ({
         styles="w-full"
         key={screenshotProps.parallaxAxis}
       />
-      <div className="absolute -top-10 left-2 translate-y-full opacity-0 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0">
-        <span className="text-xl font-medium">{gameName}</span>
-      </div>
+      {hasMouse && (
+        <div className="absolute -top-10 left-2 translate-y-full opacity-0 transition-all duration-300 ease-out mouse:hover:text-red-400 group-hover:opacity-100 group-hover:translate-y-0">
+          <span className="text-xl font-medium">{gameName}</span>
+        </div>
+      )}
     </div>
   );
 };

@@ -8,7 +8,7 @@ const Title = ({ style }: { style?: string }) => {
   return (
     <div
       className={twMerge(
-        "transition-opacity duration-500",
+        "transition-opacity duration-500 mix-blend-difference text-white",
         style,
         animationFinished ? "opacity-100" : "opacity-0"
       )}

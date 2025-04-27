@@ -138,7 +138,7 @@ const Carousel = ({ games }: { games: Game[] }) => {
                         containerRef: lgScreen ? containerRef : undefined,
                         parallaxAxis: lgScreen ? "x" : "y",
                       }}
-                      styles="px-6"
+                      styles="px-6 md:px-0"
                     />
                   );
                 })}

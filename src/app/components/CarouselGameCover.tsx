@@ -1,3 +1,4 @@
+import { twMerge } from "tailwind-merge";
 import ScreenshotWithParallax, {
   ScreenshotWithParallaxProps,
 } from "./ScreenshotWithParallax";
@@ -5,12 +6,19 @@ import ScreenshotWithParallax, {
 const CarouselGameCover = ({
   gameName,
   screenshotProps,
+  styles,
 }: {
   gameName: string;
   screenshotProps: ScreenshotWithParallaxProps;
+  styles?: string;
 }) => {
   return (
-    <div className="group relative w-full lg:w-1/2 max-w-[1000px] shrink-0">
+    <div
+      className={twMerge(
+        "group relative w-full lg:w-1/4 3xl:w-1/2 max-w-[1000px] shrink-0",
+        styles
+      )}
+    >
       <ScreenshotWithParallax
         {...screenshotProps}
         styles="w-full"

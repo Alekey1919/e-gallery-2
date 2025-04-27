@@ -1,6 +1,9 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import useMediaQueryState, {
+  DefaultBreakpoints,
+} from "../hooks/useMediaQueryState";
 
 enum AnimationStep {
   zoomInAll,
@@ -26,6 +29,8 @@ const InitialAnimation = ({
   const targetRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
 
+  const lgScreen = useMediaQueryState({ breakpoint: DefaultBreakpoints.lg });
+
   const randomScreenshots = useMemo(() => {
     return [...screenshots].sort(() => 0.5 - Math.random());
   }, []);
@@ -39,18 +44,20 @@ const InitialAnimation = ({
   const { scrollXProgress, scrollYProgress } = useScroll(
     isReady
       ? {
-          container: containerRef,
-          target: targetRef,
-          offset: ["start end", "end start"],
+          container: lgScreen ? containerRef : undefined,
+          target: lgScreen ? targetRef : undefined,
+          offset: lgScreen
+            ? ["start end", "end start"] // Horizontal scroll offset (for desktop)
+            : ["start start", "end end"], // Vertical scroll offset (for mobile)
         }
       : {}
   );
 
   // Map scroll progress [0, 1] to blur [0px, 20px]
   const blur = useTransform(
-    scrollXProgress,
+    lgScreen ? scrollXProgress : scrollYProgress,
     [0, 1],
-    ["blur(0px)", "blur(200px)"]
+    ["blur(0px)", lgScreen ? "blur(200px)" : "blur(50px)"]
   );
 
   const [animationStep, setAnimationStep] = useState(AnimationStep.zoomInAll);
@@ -85,7 +92,7 @@ const InitialAnimation = ({
 
   return (
     <div
-      className="w-screen h-screen bg-white shrink-0  lg:-translate-x-10 lg:translate-y-10 3xl:!-translate-x-20 3xl:!translate-y-20 relative overflow-hidden justify-center items-center"
+      className="w-screen h-screen bg-white shrink-0  lg:-translate-x-10 lg:translate-y-10 3xl:!-translate-x-20 3xl:!translate-y-20 relative overflow-hidden justify-center items-center z-10"
       ref={targetRef}
     >
       {randomScreenshots.map((screenshots, index) => {

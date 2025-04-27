@@ -55,13 +55,13 @@ const InitialAnimation = ({
 
   const [animationStep, setAnimationStep] = useState(AnimationStep.zoomInAll);
   const [animatedScreenshots, setAnimatedScreenshots] = useState<{
-    [key: number]: { show: boolean; animate: boolean };
+    [key: number]: boolean;
   }>({
-    0: { show: false, animate: false },
-    1: { show: false, animate: false },
-    2: { show: false, animate: false },
-    3: { show: false, animate: false },
-    4: { show: false, animate: false },
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
   });
 
   useEffect(() => {
@@ -69,14 +69,8 @@ const InitialAnimation = ({
       setTimeout(() => {
         setAnimatedScreenshots((prev) => ({
           ...prev,
-          [i]: { ...prev[i], show: true },
+          [i]: true,
         }));
-        setTimeout(() => {
-          setAnimatedScreenshots((prev) => ({
-            ...prev,
-            [i]: { ...prev[i], animate: true },
-          }));
-        }, 10);
       }, (randomScreenshots.length - i) * ANIMATION_DURATION);
     }
 
@@ -121,12 +115,8 @@ const InitialAnimation = ({
             )}
             style={{
               filter: blur,
-              transform: animatedScreenshots[index].animate
-                ? `scale(${scale})`
-                : "",
-              visibility: animatedScreenshots[index].show
-                ? "visible"
-                : "hidden",
+              transform: animatedScreenshots[index] ? `scale(${scale})` : "",
+              visibility: animatedScreenshots[index] ? "visible" : "hidden",
               zIndex: -(index + 1),
               transition: `all ${transitionTime} ${
                 animationStep !== AnimationStep.zoomInAll

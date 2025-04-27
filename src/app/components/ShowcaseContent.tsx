@@ -25,7 +25,6 @@ const ShowcaseContent = ({
   const [animationStep, setAnimationStep] = useState(AnimationStep.LOADING);
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [lenisInst, setLenisInst] = useState<Lenis | null>(null);
 
   useEffect(() => {
     if (!contentRef.current || !containerRef.current) return;
@@ -44,8 +43,6 @@ const ShowcaseContent = ({
       syncTouch: true, // Synchronizes touch events
       autoRaf: true,
     });
-
-    setLenisInst(lenis);
 
     // Cleanup function
     return () => {

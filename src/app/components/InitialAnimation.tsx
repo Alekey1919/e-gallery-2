@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import useMediaQueryState, {
   DefaultBreakpoints,
 } from "../hooks/useMediaQueryState";
+import useCarouselContext from "../contexts/CarouselContext";
 
 enum AnimationStep {
   zoomInAll,
@@ -21,15 +22,13 @@ const screenshots = [
 
 const ANIMATION_DURATION = 200;
 
-const InitialAnimation = ({
-  containerRef,
-}: {
-  containerRef: React.RefObject<HTMLDivElement | null>;
-}) => {
+const InitialAnimation = () => {
   const targetRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
 
   const lgScreen = useMediaQueryState({ breakpoint: DefaultBreakpoints.lg });
+
+  const { setAnimationFinished, carouselContainerRef } = useCarouselContext();
 
   const randomScreenshots = useMemo(() => {
     return [...screenshots].sort(() => 0.5 - Math.random());
@@ -44,7 +43,7 @@ const InitialAnimation = ({
   const { scrollXProgress, scrollYProgress } = useScroll(
     isReady
       ? {
-          container: lgScreen ? containerRef : undefined,
+          container: lgScreen ? carouselContainerRef : undefined,
           target: lgScreen ? targetRef : undefined,
           offset: lgScreen
             ? ["start end", "end start"] // Horizontal scroll offset (for desktop)
@@ -86,9 +85,18 @@ const InitialAnimation = ({
 
       setTimeout(() => {
         setAnimationStep(AnimationStep.zoomInMain);
+
+        setTimeout(() => {
+          setAnimationFinished(true);
+        }, 2000);
       }, 450);
     }, randomScreenshots.length * ANIMATION_DURATION + 500);
-  }, [randomScreenshots.length]);
+  }, [
+    carouselContainerRef,
+    lgScreen,
+    randomScreenshots.length,
+    setAnimationFinished,
+  ]);
 
   return (
     <div

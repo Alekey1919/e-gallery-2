@@ -3,8 +3,6 @@ import { twMerge } from "tailwind-merge";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import ScreenshotWithParallax from "./ScreenshotWithParallax";
-import CloseIcon from "@public/close.png";
-import Image from "next/image";
 import ShowcaseCover from "./ShowcaseCover";
 
 enum AnimationStep {
@@ -55,22 +53,12 @@ const ShowcaseContent = ({
     };
   }, []);
 
-  const onClose = ({ scrolledAllTheWay }: { scrolledAllTheWay: boolean }) => {
-    // Scroll a bit to perform a little animation while the entire section is disappearing towards the top
-    if (containerRef.current && lenisInst) {
-      lenisInst.scrollTo(containerRef.current.scrollTop + 500);
-    }
+  const onClose = () => {
+    setAnimationStep(AnimationStep.EXIT);
 
-    setTimeout(
-      () => {
-        setAnimationStep(AnimationStep.EXIT);
-
-        setTimeout(() => {
-          handleClose();
-        }, 800); // Match the duration of the CSS transition
-      },
-      scrolledAllTheWay ? 0 : 100 // If scrolled all the way, close immediately; otherwise, give time to see the scrolling animation
-    );
+    setTimeout(() => {
+      handleClose();
+    }, 800); // Match the duration of the CSS transition
   };
 
   const onScroll = () => {
@@ -81,7 +69,7 @@ const ShowcaseContent = ({
       containerRef.current.scrollHeight;
 
     if (scrolledAllTheWay) {
-      onClose({ scrolledAllTheWay: true });
+      onClose();
     }
   };
 
@@ -89,13 +77,16 @@ const ShowcaseContent = ({
     <>
       <div
         className={twMerge(
-          "bg-background fixed top-0 left-0 h-screen w-screen overflow-y-auto overflow-x-hidden translate-y-full duration-700 ease-out transition-transform",
+          "bg-background fixed top-0 left-0 h-screen w-screen overflow-y-auto overflow-x-hidden translate-y-full duration-700 transition-transform",
           "pb-20 lg:pb-28 3xl:!pb-40",
           animationStep === AnimationStep.ENTER && "translate-y-0",
-          animationStep === AnimationStep.EXIT && "ease-in -translate-y-full"
+          animationStep === AnimationStep.EXIT && "-translate-y-full"
         )}
         ref={containerRef}
         onScroll={onScroll}
+        style={{
+          transitionTimingFunction: "cubic-bezier(0.770, 0.000, 0.175, 1.000)",
+        }}
         id="containerRef"
       >
         <ShowcaseCover
@@ -132,12 +123,12 @@ const ShowcaseContent = ({
 
       <button
         className={twMerge(
-          "fixed top-4 right-4 lg:top-6 lg:right-6 3xl:!top-8 3xl:!right-8 z-[100] transition-opacity duration-300 cursor-pointer",
+          "fixed top-4 right-4 lg:top-6 lg:right-6 3xl:!top-8 3xl:!right-8 z-[100] transition-opacity duration-300 cursor-pointer text-white mix-blend-difference",
           animationStep === AnimationStep.EXIT && "opacity-0"
         )}
-        onClick={() => onClose({ scrolledAllTheWay: false })}
+        onClick={onClose}
       >
-        <Image src={CloseIcon} alt="Close" className="w-6 lg:w-8 3xl:!w-12" />
+        Back
       </button>
     </>
   );

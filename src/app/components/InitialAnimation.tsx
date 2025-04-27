@@ -118,7 +118,7 @@ const InitialAnimation = ({
               "object-cover absolute inset-0 top-0 bottom-0 right-0 left-0 m-auto",
               isFulScreen
                 ? "w-full h-screen"
-                : "w-[300px] h-[200px] lg:w-[600px] lg:h-[400px] 3xl:!w-[700px] 3xl:!h-[500px]"
+                : "h-[300px] w-[200px] sm:h-[400px] sm:w-[280px] lg:w-[600px] lg:h-[400px] 3xl:!w-[700px] 3xl:!h-[500px]"
             )}
             style={{
               filter: blur,

@@ -85,13 +85,13 @@ const Carousel = ({ games }: { games: Game[] }) => {
 
             <div
               className={twMerge(
-                "grid gap-6 grid-cols-1 sm:grid-cols-2 lg:gap-0 mx-auto lg:mx-0",
+                "grid gap-6 grid-cols-1 md:grid-cols-2 lg:gap-0 mx-auto lg:mx-0",
                 "lg:flex lg:flex-row lg:items-end lg:space-x-6 3xl:!space-x-10 4xl:!space-x-14 pb-6 lg:px-10 lg:pb-10 3xl:!pb-20 3xl:!px-20"
               )}
               ref={targetRef}
             >
               <InitialAnimation containerRef={containerRef} />
-              <Title style="lg:hidden text-center" />
+              <Title style="lg:hidden text-center md:col-span-2" />
               {games.map((game) => {
                 if (!game.screenshots) return null; // Skip if no screenshots
 

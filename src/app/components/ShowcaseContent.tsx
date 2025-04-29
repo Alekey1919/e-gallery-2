@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
@@ -25,6 +25,15 @@ const ShowcaseContent = ({
   const [animationStep, setAnimationStep] = useState(AnimationStep.LOADING);
   const contentRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isScrollLocked, setIsScrollLocked] = useState(false);
+
+  const onClose = useCallback(() => {
+    setAnimationStep(AnimationStep.EXIT);
+
+    setTimeout(() => {
+      handleClose();
+    }, 800); // Match the duration of the CSS transition
+  }, [handleClose]);
 
   useEffect(() => {
     if (!contentRef.current || !containerRef.current) return;
@@ -43,31 +52,24 @@ const ShowcaseContent = ({
       autoRaf: true,
     });
 
+    // Add Lenis scroll listener
+    lenis.on("scroll", ({ scroll, limit }) => {
+      // Check if scrolled to bottom with a small threshold for better detection
+      if (scroll >= limit - 10 && !isScrollLocked) {
+        // Lock scrolling immediately
+        setIsScrollLocked(true);
+
+        setTimeout(() => {
+          onClose();
+        }, 500);
+      }
+    });
+
     // Cleanup function
     return () => {
       lenis.destroy();
     };
-  }, []);
-
-  const onClose = () => {
-    setAnimationStep(AnimationStep.EXIT);
-
-    setTimeout(() => {
-      handleClose();
-    }, 800); // Match the duration of the CSS transition
-  };
-
-  const onScroll = () => {
-    if (!containerRef.current) return;
-
-    const scrolledAllTheWay =
-      containerRef.current.scrollTop + window.innerHeight >=
-      containerRef.current.scrollHeight;
-
-    if (scrolledAllTheWay) {
-      onClose();
-    }
-  };
+  }, [onClose, isScrollLocked]);
 
   return (
     <>
@@ -76,10 +78,10 @@ const ShowcaseContent = ({
           "bg-background fixed top-0 left-0 h-screen w-screen overflow-y-auto overflow-x-hidden translate-y-full duration-700 transition-transform",
           "pb-20 lg:pb-28 3xl:!pb-40",
           animationStep === AnimationStep.ENTER && "translate-y-0",
-          animationStep === AnimationStep.EXIT && "-translate-y-full"
+          animationStep === AnimationStep.EXIT && "-translate-y-full",
+          isScrollLocked && "pointer-events-none" // Prevent all pointer interactions when locked
         )}
         ref={containerRef}
-        onScroll={onScroll}
         style={{
           transitionTimingFunction: "cubic-bezier(0.770, 0.000, 0.175, 1.000)",
         }}
@@ -120,7 +122,8 @@ const ShowcaseContent = ({
       <button
         className={twMerge(
           "fixed top-4 right-4 lg:top-6 lg:right-6 3xl:!top-8 3xl:!right-8 z-[100] transition-opacity duration-300 cursor-pointer text-white mix-blend-difference",
-          animationStep === AnimationStep.EXIT && "opacity-0"
+          (animationStep === AnimationStep.EXIT || isScrollLocked) &&
+            "opacity-0 pointer-events-none"
         )}
         onClick={onClose}
       >

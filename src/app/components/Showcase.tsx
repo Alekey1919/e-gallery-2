@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ShowcaseContent from "./ShowcaseContent";
 
 interface Screenshot {
@@ -13,10 +13,12 @@ const Showcase = ({
   gameId,
   gameName,
   handleClose,
+  setShowcaseLoaded,
 }: {
   gameId: string;
   gameName: string;
   handleClose: () => void;
+  setShowcaseLoaded: Dispatch<SetStateAction<boolean>>;
 }) => {
   const [screenshots, setScreenshots] = useState<Screenshot[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,11 +39,19 @@ const Showcase = ({
         console.error("Error fetching screenshots:", error);
       } finally {
         setLoading(false);
+
+        setTimeout(() => {
+          setShowcaseLoaded(true);
+        }, 1000); // Delay to allow for smooth transition
       }
     };
 
     fetchScreenshots();
-  }, [gameId]);
+  }, [gameId, setShowcaseLoaded]);
+
+  useEffect(() => {
+    return () => setShowcaseLoaded(false);
+  }, [setShowcaseLoaded]);
 
   if (loading) {
     return <></>;

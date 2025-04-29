@@ -8,10 +8,12 @@ const CarouselGameCover = ({
   gameName,
   screenshotProps,
   styles,
+  isLoading,
 }: {
   gameName: string;
   screenshotProps: ScreenshotWithParallaxProps;
   styles?: string;
+  isLoading: boolean;
 }) => {
   const hasMouse = useMediaQueryState({
     query: "(hover: hover), (pointer: fine)",
@@ -21,7 +23,8 @@ const CarouselGameCover = ({
     <div
       className={twMerge(
         "group relative w-full lg:w-1/4 3xl:w-1/2 max-w-[1000px] shrink-0",
-        styles
+        styles,
+        isLoading && "skeleton"
       )}
     >
       <ScreenshotWithParallax

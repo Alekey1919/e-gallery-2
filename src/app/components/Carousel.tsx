@@ -29,6 +29,7 @@ const Carousel = ({ games }: { games: Game[] }) => {
   const [lenisInst, setLenisInst] = useState<Lenis | null>(null);
   const [animationFinished, setAnimationFinished] = useState(false);
   const [initialScrollHappened, setInitialScrollHappened] = useState(false);
+  const [showcaseLoaded, setShowcaseLoaded] = useState(false);
   const [selectedGame, setSelectedGame] = useState<{
     id: string;
     name: string;
@@ -139,6 +140,9 @@ const Carousel = ({ games }: { games: Game[] }) => {
                         parallaxAxis: lgScreen ? "x" : "y",
                       }}
                       styles="px-6 md:px-0"
+                      isLoading={
+                        !showcaseLoaded && game.id === selectedGame?.id
+                      }
                     />
                   );
                 })}
@@ -153,6 +157,7 @@ const Carousel = ({ games }: { games: Game[] }) => {
             gameId={selectedGame.id}
             gameName={selectedGame.name}
             handleClose={() => setSelectedGame(null)}
+            setShowcaseLoaded={setShowcaseLoaded}
           />
         )}
       </>

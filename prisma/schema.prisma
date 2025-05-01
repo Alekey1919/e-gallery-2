@@ -15,6 +15,7 @@ datasource db {
 model Game {
   id          String       @id
   name        String
+  order       Int          @default(0)
   screenshots Screenshot[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -26,6 +27,7 @@ model Screenshot {
   gameId    String
   game      Game     @relation(fields: [gameId], references: [id])
   gameCover Boolean  @default(false)
+  order       Int          @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
